@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.3
+## 1.0.4
 
 Current release of **DataDump Export**. See [README](README.md) for features, installation, and usage.
 
