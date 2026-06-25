@@ -1,0 +1,296 @@
+{
+  components: [
+    {
+      type: 'dmx-datadump-export'
+      selector: 'dmx-datadump-export, [is=dmx-datadump-export]'
+      framework: 'bootstrap5'
+      groupTitle: 'Mr Cheese'
+      groupIcon: 'fas fa-lg fa-cheese comp-exec'
+      title: 'DataDump Export: @@id@@'
+      icon: 'fas fa-lg fa-file-export comp-data'
+      state: 'opened'
+      anyParent: true
+      template: '<dmx-datadump-export id="@@id@@" target-selector="#exportTarget" filename-prefix="export" design-label="DataDump export"><div class="datadump-export-toolbar" role="toolbar" aria-label="Export"></div></dmx-datadump-export>'
+      baseName: 'dataDumpExport'
+      help: 'Export a page section to PDF, CSV, or Excel. Set Target selector to the container (e.g. #accountsReport). Toggle which format icons appear. Place multiple instances on one page; each has its own target and options. Put the toolbar outside the export target so buttons are not included in the file.'
+
+      properties: [
+        {
+          group: 'Export target'
+          variables: [
+            {
+              name: 'compId'
+              optionName: 'id'
+              attribute: 'id'
+              title: 'ID'
+              type: 'text'
+              required: true
+              defaultValue: ''
+            }
+            {
+              name: 'targetSelector'
+              optionName: 'targetSelector'
+              attribute: 'target-selector'
+              title: 'Target selector'
+              type: 'text'
+              required: true
+              defaultValue: '#exportTarget'
+              help: 'CSS selector for the section to export, e.g. #accountsReport or .reservations-panel'
+            }
+            {
+              name: 'exportTitle'
+              optionName: 'exportTitle'
+              attribute: 'export-title'
+              title: 'Export title'
+              type: 'text'
+              dataBindings: true
+              defaultValue: ''
+              help: 'PDF title and filename slug. Falls back to first heading in the target or "Export".'
+            }
+            {
+              name: 'filenamePrefix'
+              optionName: 'filenamePrefix'
+              attribute: 'filename-prefix'
+              title: 'Filename prefix'
+              type: 'text'
+              defaultValue: 'export'
+              help: 'Download name: prefix-title-date.ext'
+            }
+            {
+              name: 'payloadJson'
+              optionName: 'payloadJson'
+              attribute: 'payload-json'
+              title: 'Structured payload (JSON)'
+              type: 'textarea'
+              dataBindings: true
+              defaultValue: ''
+              help: 'Optional. Markdown/mixed JSON for richer PDF and table extraction. Leave empty to export from target HTML.'
+            }
+          ]
+        }
+        {
+          group: 'Formats'
+          variables: [
+            {
+              name: 'showPdf'
+              optionName: 'showPdf'
+              attribute: 'show-pdf'
+              title: 'Show PDF'
+              type: 'boolean'
+              defaultValue: true
+              help: 'Display PDF export icon (full content: prose, tables, images).'
+            }
+            {
+              name: 'showCsv'
+              optionName: 'showCsv'
+              attribute: 'show-csv'
+              title: 'Show CSV'
+              type: 'boolean'
+              defaultValue: true
+              help: 'Display CSV export icon (table data only).'
+            }
+            {
+              name: 'showExcel'
+              optionName: 'showExcel'
+              attribute: 'show-excel'
+              title: 'Show Excel'
+              type: 'boolean'
+              defaultValue: true
+              help: 'Display Excel (.xlsx) export icon (table data only).'
+            }
+            {
+              name: 'showPdfFooterTimestamp'
+              optionName: 'showPdfFooterTimestamp'
+              attribute: 'show-pdf-footer-timestamp'
+              title: 'Show PDF footer date/time'
+              type: 'boolean'
+              defaultValue: true
+              help: 'Include the export date and time in the PDF footer (when Show PDF is enabled).'
+            }
+          ]
+        }
+        {
+          group: 'PDF'
+          variables: [
+            {
+              name: 'pdfFooter'
+              optionName: 'pdfFooter'
+              attribute: 'pdf-footer'
+              title: 'PDF footer text'
+              type: 'text'
+              dataBindings: true
+              defaultValue: ''
+            }
+            {
+              name: 'locale'
+              optionName: 'locale'
+              attribute: 'locale'
+              title: 'Locale (date/time)'
+              type: 'text'
+              defaultValue: 'en-GB'
+            }
+          ]
+        }
+        {
+          group: 'Labels & errors'
+          variables: [
+            {
+              name: 'pdfLabel'
+              optionName: 'pdfLabel'
+              attribute: 'pdf-label'
+              title: 'PDF button label'
+              type: 'text'
+              dataBindings: true
+              defaultValue: 'Export PDF'
+            }
+            {
+              name: 'csvLabel'
+              optionName: 'csvLabel'
+              attribute: 'csv-label'
+              title: 'CSV button label'
+              type: 'text'
+              dataBindings: true
+              defaultValue: 'Export CSV'
+            }
+            {
+              name: 'excelLabel'
+              optionName: 'excelLabel'
+              attribute: 'excel-label'
+              title: 'Excel button label'
+              type: 'text'
+              dataBindings: true
+              defaultValue: 'Export Excel'
+            }
+            {
+              name: 'pdfError'
+              optionName: 'pdfError'
+              attribute: 'pdf-error'
+              title: 'PDF error message'
+              type: 'text'
+              dataBindings: true
+              defaultValue: 'Could not export PDF.'
+            }
+            {
+              name: 'csvError'
+              optionName: 'csvError'
+              attribute: 'csv-error'
+              title: 'CSV error message'
+              type: 'text'
+              dataBindings: true
+              defaultValue: 'No table found to export as CSV.'
+            }
+            {
+              name: 'excelError'
+              optionName: 'excelError'
+              attribute: 'excel-error'
+              title: 'Excel error message'
+              type: 'text'
+              dataBindings: true
+              defaultValue: 'No table found to export as Excel.'
+            }
+            {
+              name: 'designLabel'
+              optionName: 'designLabel'
+              attribute: 'design-label'
+              title: 'Design label'
+              type: 'text'
+              defaultValue: 'DataDump export'
+            }
+          ]
+        }
+        {
+          group: 'Advanced'
+          variables: [
+            {
+              name: 'pdfmakeUrl'
+              optionName: 'pdfmakeUrl'
+              attribute: 'pdfmake-url'
+              title: 'pdfmake script URL'
+              type: 'text'
+              defaultValue: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js'
+            }
+            {
+              name: 'vfsFontsUrl'
+              optionName: 'vfsFontsUrl'
+              attribute: 'vfs-fonts-url'
+              title: 'pdfmake fonts URL'
+              type: 'text'
+              defaultValue: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js'
+            }
+            {
+              name: 'xlsxUrl'
+              optionName: 'xlsxUrl'
+              attribute: 'xlsx-url'
+              title: 'SheetJS script URL'
+              type: 'text'
+              defaultValue: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+            }
+            {
+              name: 'toolbarClass'
+              optionName: 'toolbarClass'
+              attribute: 'toolbar-class'
+              title: 'Toolbar CSS class'
+              type: 'text'
+              defaultValue: 'datadump-export-toolbar'
+            }
+            {
+              name: 'buttonClass'
+              optionName: 'buttonClass'
+              attribute: 'button-class'
+              title: 'Button CSS class'
+              type: 'text'
+              defaultValue: 'datadump-export-btn'
+            }
+          ]
+        }
+      ]
+
+      children: []
+      allowed_children: {}
+
+      copyFiles: [
+        {src: 'includes/dmx-datadump-shared.js', dst: 'js/dmx-datadump-shared.js'}
+        {src: 'includes/dmx-datadump-export.js', dst: 'js/dmx-datadump-export.js'}
+        {src: 'includes/dmx-datadump-export.css', dst: 'css/dmx-datadump-export.css'}
+      ]
+
+      linkFiles: [
+        {src: 'css/dmx-datadump-export.css', type: 'css'}
+        {src: 'js/dmx-datadump-shared.js', type: 'js', defer: true}
+        {src: 'js/dmx-datadump-export.js', type: 'js', defer: true}
+      ]
+
+      cssOrder: ['dmx-datadump-export.css']
+      jsOrder: ['dmx-datadump-shared.js', 'dmx-datadump-export.js']
+    }
+  ]
+
+  attributes: []
+
+  events: [
+    {
+      name: 'dmx-datadump-export-pdf-done'
+      attribute: 'pdfDone'
+      title: 'PDF exported'
+      allowedOn: {'dmx-datadump-export': true}
+    }
+    {
+      name: 'dmx-datadump-export-csv-done'
+      attribute: 'csvDone'
+      title: 'CSV exported'
+      allowedOn: {'dmx-datadump-export': true}
+    }
+    {
+      name: 'dmx-datadump-export-excel-done'
+      attribute: 'excelDone'
+      title: 'Excel exported'
+      allowedOn: {'dmx-datadump-export': true}
+    }
+    {
+      name: 'dmx-datadump-export-error'
+      attribute: 'error'
+      title: 'Export error'
+      allowedOn: {'dmx-datadump-export': true}
+    }
+  ]
+}

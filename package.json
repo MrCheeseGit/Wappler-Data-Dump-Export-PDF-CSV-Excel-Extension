@@ -1,0 +1,30 @@
+{
+  "name": "wappler-datadump-export",
+  "version": "1.0.3",
+  "description": "DataDump: export page sections to PDF, CSV, or Excel from App Connect",
+  "main": "app_connect/includes/dmx-datadump-export.js",
+  "homepage": "https://www.mrcheese.co.uk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrCheeseGit/Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension.git"
+  },
+  "keywords": [
+    "wappler",
+    "app-connect",
+    "extension",
+    "export",
+    "pdf",
+    "csv",
+    "excel",
+    "xlsx",
+    "datadump",
+    "mrcheese",
+    "wappler-extension"
+  ],
+  "author": "Mr Cheese",
+  "license": "SEE LICENSE IN LICENSE",
+  "wappler": {
+    "module": "datadump",
+    "version": "1.0.3"
+  }
+}

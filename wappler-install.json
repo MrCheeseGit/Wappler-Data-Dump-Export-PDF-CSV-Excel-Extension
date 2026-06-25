@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "datadump-export",
+  "name": "DataDump Export",
+  "version": "1.0.3",
+  "cloneDir": "Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension",
+  "hasServerConnect": false,
+  "hasAppConnect": true,
+  "readme": "https://github.com/MrCheeseGit/Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension#installation",
+  "appConnect": {
+    "directories": [
+      "extensions/app_connect/components",
+      "public/js",
+      "public/css"
+    ],
+    "copy": [
+      {
+        "src": "app_connect/components.hjson",
+        "dest": "extensions/app_connect/components/datadump_components.hjson"
+      },
+      {
+        "src": "app_connect/includes/dmx-datadump-shared.js",
+        "dest": "public/js/dmx-datadump-shared.js"
+      },
+      {
+        "src": "app_connect/includes/dmx-datadump-export.js",
+        "dest": "public/js/dmx-datadump-export.js"
+      },
+      {
+        "src": "app_connect/includes/dmx-datadump-export.css",
+        "dest": "public/css/dmx-datadump-export.css"
+      }
+    ],
+    "notes": [
+      "Enable Font Awesome in your layout if PDF/CSV/Excel icons do not appear.",
+      "Place dmx-datadump-export next to (not inside) the section you export. Set Target selector to that section's id or class.",
+      "Toggle Show PDF / Show CSV / Show Excel in component properties for each instance.",
+      "npm users: verify node_modules, run the Mr Cheese npm install assistant copy script, then Project Updater.",
+      "Quit Wappler completely and reopen."
+    ]
+  }
+}
