@@ -35,7 +35,7 @@
       "Enable Font Awesome in your layout if PDF/CSV/Excel icons do not appear.",
       "Place dmx-datadump-export next to (not inside) the section you export. Set Target selector to that section's id or class.",
       "Toggle Show PDF / Show CSV / Show Excel in component properties for each instance.",
-      "npm users: verify node_modules, run the Mr Cheese npm install assistant copy script, then Project Updater.",
+      "npm: Project Settings → Extensions, npm install, Project Updater, then quit Wappler completely and reopen.",
       "Quit Wappler completely and reopen."
     ]
   }
