@@ -19,15 +19,15 @@
         "dest": "extensions/app_connect/components/datadump_components.hjson"
       },
       {
-        "src": "app_connect/includes/dmx-datadump-shared.js",
+        "src": "includes/dmx-datadump-shared.js",
         "dest": "public/js/dmx-datadump-shared.js"
       },
       {
-        "src": "app_connect/includes/dmx-datadump-export.js",
+        "src": "includes/dmx-datadump-export.js",
         "dest": "public/js/dmx-datadump-export.js"
       },
       {
-        "src": "app_connect/includes/dmx-datadump-export.css",
+        "src": "includes/dmx-datadump-export.css",
         "dest": "public/css/dmx-datadump-export.css"
       }
     ],

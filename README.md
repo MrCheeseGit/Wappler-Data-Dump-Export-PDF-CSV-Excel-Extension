@@ -69,9 +69,9 @@ Run from your **Wappler project root**; skip `git clone` if you already cloned t
 git clone https://github.com/MrCheeseGit/Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension.git ../Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension
 
 cp ../Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension/app_connect/components.hjson extensions/app_connect/components/datadump_components.hjson
-cp ../Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension/app_connect/includes/dmx-datadump-shared.js public/js/
-cp ../Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension/app_connect/includes/dmx-datadump-export.js public/js/
-cp ../Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension/app_connect/includes/dmx-datadump-export.css public/css/
+cp ../Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension/includes/dmx-datadump-shared.js public/js/
+cp ../Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension/includes/dmx-datadump-export.js public/js/
+cp ../Wappler-Data-Dump-Export-PDF-CSV-Excel-Extension/includes/dmx-datadump-export.css public/css/
 ```
 
 ### npm install (Wappler Project Settings)
