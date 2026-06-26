@@ -3,7 +3,6 @@
     {
       "type": "dmx-datadump-export",
       "selector": "dmx-datadump-export, [is=dmx-datadump-export]",
-      "framework": "bootstrap5",
       "groupTitle": "Mr Cheese",
       "groupIcon": "fas fa-lg fa-cheese comp-exec",
       "title": "DataDump Export: @@id@@",
@@ -105,6 +104,19 @@
               "type": "boolean",
               "defaultValue": true,
               "help": "Include the export date and time in the PDF footer (when Show PDF is enabled)."
+            },
+            {
+              "name": "pdfOrientation",
+              "optionName": "pdfOrientation",
+              "attribute": "pdf-orientation",
+              "title": "PDF page orientation",
+              "type": "droplist",
+              "defaultValue": "portrait",
+              "help": "Portrait (default) or landscape for wide tables and dashboards.",
+              "values": [
+                { "title": "Portrait", "value": "portrait" },
+                { "title": "Landscape", "value": "landscape" }
+              ]
             }
           ]
         },
@@ -127,6 +139,43 @@
               "title": "Locale (date/time)",
               "type": "text",
               "defaultValue": "en-GB"
+            },
+            {
+              "name": "pdfExportCss",
+              "optionName": "pdfExportCss",
+              "attribute": "pdf-export-css",
+              "title": "PDF export CSS",
+              "type": "textarea",
+              "dataBindings": true,
+              "defaultValue": "",
+              "help": "Optional CSS applied only during PDF export (injected on a hidden copy of the target). Use for dark themes: e.g. background:#fff; color:#111 on the root selector."
+            },
+            {
+              "name": "pdfUseComputedStyles",
+              "optionName": "pdfUseComputedStyles",
+              "attribute": "pdf-use-computed-styles",
+              "title": "Use page styles in PDF",
+              "type": "boolean",
+              "defaultValue": true,
+              "help": "Read computed colours, fonts, and table backgrounds from the page (and PDF export CSS above) when building the PDF."
+            },
+            {
+              "name": "pdfPageBackground",
+              "optionName": "pdfPageBackground",
+              "attribute": "pdf-page-background",
+              "title": "PDF staging background",
+              "type": "text",
+              "defaultValue": "#ffffff",
+              "help": "Background on the hidden export copy. Helps when exporting from dark pages."
+            },
+            {
+              "name": "pdfMaxImageWidth",
+              "optionName": "pdfMaxImageWidth",
+              "attribute": "pdf-max-image-width",
+              "title": "PDF max image width (pt)",
+              "type": "number",
+              "defaultValue": 420,
+              "help": "Cap for images without width/height on the tag. Smaller on-screen images use their rendered size instead."
             }
           ]
         },

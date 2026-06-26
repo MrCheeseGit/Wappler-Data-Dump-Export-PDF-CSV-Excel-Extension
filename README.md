@@ -5,7 +5,7 @@
 
 [![License: Mr Cheese Extension v1.0](https://img.shields.io/badge/License-Mr%20Cheese%20Extension%20v1.0-blue.svg)](https://www.mrcheese.co.uk/extension-license)
 ![Wappler](https://img.shields.io/badge/Wappler-App%20Connect-teal)
-![Version](https://img.shields.io/badge/version-1%2E0%2E8-green)
+![Version](https://img.shields.io/badge/version-1%2E0%2E9-green)
 
 Built by **[Mr Cheese](https://www.mrcheese.co.uk)** · Wappler extensions & custom modules
 
@@ -16,8 +16,21 @@ Built by **[Mr Cheese](https://www.mrcheese.co.uk)** · Wappler extensions & cus
 1. **DataDump Export:** App Connect component with icon buttons for **PDF**, **CSV**, and **Excel**.
 2. Each instance has its own **target selector** (e.g. `#accountsReport`, `.reservations-panel`).
 3. Toggle **Show PDF**, **Show CSV**, and **Show Excel** per instance. Only the formats you need appear.
-4. **PDF** exports from the **live rendered HTML** in your target (Bootstrap tables, colours, stacked dates). Structured JSON payload is still used when you bind `payload-json`, but PDF prefers the on-screen DOM so styling matches the page.
+4. **PDF** exports from the **live rendered HTML** in your target (any markup: tables, colours, lists, images). It clones your section off-screen, applies page CSS plus optional **PDF export CSS**, reads **computed styles** (colours, fonts, table bands), then builds the PDF so output closely matches what users see on screen.
 5. **CSV** and **Excel** export **table data only** (HTML `<table>` or markdown pipe tables in optional JSON payload).
+
+### PDF highlights (v1.0.9)
+
+| Feature | What it does |
+|---------|----------------|
+| **Portrait / landscape** | Set **PDF page orientation** in the **Formats** panel (landscape for wide tables and dashboards). |
+| **Use page styles in PDF** | On by default: reads computed colours, bold/italic, font sizes, and table header/stripe backgrounds from the live page. |
+| **PDF export CSS** | Optional textarea in the **PDF** group: paste CSS used **only during export** (e.g. force white background and dark text on dark-theme sites). |
+| **PDF staging background** | Default `#ffffff` on the hidden export copy so dark pages do not export with black backgrounds unless you want them. |
+| **Smarter images** | Respects on-screen / `width` attribute size instead of always scaling to a large default. |
+| **Cell tones** | `data-export-tone`, `datadump-cell--*` classes, and utilities like `text-success` / `text-danger` for coloured amounts and status text. |
+
+PDF export is client-side (pdfmake): selectable text and tables, no Server Connect step required for the toolbar. It is not pixel-perfect browser print (no flex/grid engine), but it is a strong match for reports, tables, and prose without a server print pipeline.
 
 See [examples/pdf-export-with-image-bullet-list.pdf](examples/pdf-export-with-image-bullet-list.pdf) for a sample PDF with an image, bullet list, and table from a typical export block.
 
@@ -32,6 +45,8 @@ See [examples/pdf-export-with-image-bullet-list.pdf](examples/pdf-export-with-im
 ---
 
 ## Installation
+
+Official Wappler guide: [How To Install Custom Wappler Extensions](https://docs.wappler.io/t/how-to-install-custom-wappler-extensions/49982/).
 
 | Path | |
 |------|--|
@@ -141,20 +156,26 @@ Shape: `{ "type": "markdown", "body": "…" }`, `{ "type": "html", "body": "…"
 
 ### PDF layout and styling
 
-PDF export snapshots the target element when you click **Export PDF**, then walks the DOM (not a plain text scrape). That keeps Bootstrap and custom markup closer to what users see on screen.
+PDF export snapshots the target element when you click **Export PDF**, mounts a hidden copy in the document (so your theme CSS applies), injects any **PDF export CSS**, then walks the DOM with **computed styles** where enabled.
 
 | Feature | How to use it |
 |---------|----------------|
-| **Striped tables** | Bootstrap `table` / `table-striped` (pdfmake zebra rows, header band) |
-| **Cell colours** | `data-export-tone="income\|expenditure\|disbursement\|negative"` on `<td>` / `<th>`, or Bootstrap `text-success`, `text-danger`, `text-info` |
-| **Custom tones** | Classes `datadump-cell--income`, `--expenditure`, `--disbursement`, `--negative` |
+| **Page orientation** | Component property **PDF page orientation** (Formats): Portrait or Landscape |
+| **Export-only CSS** | **PDF export CSS** (PDF group): e.g. `#exportTarget { background:#fff; color:#111; }` |
+| **Computed styles** | **Use page styles in PDF** (default on); turn off if you need a plain export |
+| **Dark themes** | Set **PDF staging background** to `#ffffff` and/or use PDF export CSS for text and table colours |
+| **Striped tables** | Any `<table>`; header band and zebra rows follow page CSS when computed styles are on |
+| **Cell colours** | `data-export-tone="income\|expenditure\|disbursement\|negative"` on `<td>` / `<th>` (recommended), or classes `datadump-cell--*` |
 | **Stacked date/time** | `.datadump-datetime__date` and `.datadump-datetime__time` inside a cell (exports on two lines) |
+| **Also recognised** | Common utility classes (`text-success`, `text-danger`, `text-info`) if your theme uses them |
 | **Summary blocks** | Table class `datadump-table--summary`, or first row label Total / Subtotal / Balance / Summary |
 | **Export sub-region** | Wrap report body in `data-datadump-export-content` inside the target |
 | **Skip nodes** | `data-datadump-export-skip` on elements to omit from PDF |
 | **Charts (optional)** | `data-datadump-chart` plus `window.DATADUMP_CHARTS.chartHostToPngDataUrl()` if you register a chart helper |
 
 Inline `style="color:…"` on cells (or child `strong` / `span`) is honoured in PDF. CSV and Excel export plain cell text only (colours are PDF-only).
+
+**After updating:** run `npm install` and **Project Updater → Update** if you use npm, then **quit Wappler completely and reopen** so new component properties (orientation, PDF export CSS) appear in the designer. Hard-refresh the browser before testing exports.
 
 ---
 
@@ -166,7 +187,7 @@ Inline `style="color:…"` on cells (or child `strong` / `span`) is honoured in 
 | **Prose / headings** | Yes | No | No |
 | **Bullet / numbered lists** | Yes | No | No |
 | **Images** | Yes (same-origin or `data:` URLs) | No | No |
-| **Table striping / colours** | Yes (HTML classes, `data-export-tone`) | No | No |
+| **Table striping / colours** | Yes (computed page styles, export CSS, `data-export-tone`) | No | No |
 | **Live DOM snapshot (PDF)** | Yes, on export click | Uses tables from DOM / payload | Same as CSV |
 | **Multiple tables** | Sequential in document | `# Table N` sections in one file | Separate worksheets |
 | **Async** | Yes | No | No |
@@ -179,8 +200,8 @@ Inline `style="color:…"` on cells (or child `strong` / `span`) is honoured in 
 | Group | Key properties |
 |-------|----------------|
 | **Export target** | Target selector, Export title, Filename prefix, Structured payload (JSON) |
-| **Formats** | Show PDF, Show CSV, Show Excel |
-| **PDF** | PDF footer text, Locale, Show PDF footer timestamp |
+| **Formats** | Show PDF, Show CSV, Show Excel, Show PDF footer date/time, **PDF page orientation** (portrait / landscape) |
+| **PDF** | PDF footer text, Locale, **PDF export CSS**, **Use page styles in PDF**, PDF staging background, PDF max image width |
 | **Labels & errors** | Button labels and error messages (support `dmx-bind:` for i18n) |
 | **Advanced** | pdfmake / SheetJS CDN URLs, toolbar CSS classes |
 

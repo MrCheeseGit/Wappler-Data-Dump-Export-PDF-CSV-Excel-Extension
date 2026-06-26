@@ -18,6 +18,11 @@ dmx.Component('datadump-export', {
     payloadJson: { type: String, default: '' },
     pdfFooter: { type: String, default: '' },
     showPdfFooterTimestamp: { type: Boolean, default: true },
+    pdfOrientation: { type: String, default: 'portrait' },
+    pdfMaxImageWidth: { type: Number, default: 420 },
+    pdfExportCss: { type: String, default: '' },
+    pdfUseComputedStyles: { type: Boolean, default: true },
+    pdfPageBackground: { type: String, default: '#ffffff' },
     locale: { type: String, default: 'en-GB' },
     pdfLabel: { type: String, default: 'Export PDF' },
     csvLabel: { type: String, default: 'Export CSV' },
@@ -271,7 +276,15 @@ dmx.Component('datadump-export', {
     var run = function () {
       var targetEl = self._resolveTarget();
       var item = self._buildItem(targetEl);
-      if (format === 'pdf' && engine.enrichItemForPdf) {
+      if (format === 'pdf' && engine.preparePdfStaging) {
+        engine.preparePdfStaging(item, targetEl, {
+          pageOrientation: self._readLabel('pdf-orientation', 'pdfOrientation', 'portrait'),
+          pdfMaxImageWidth: parseInt(self._readLabel('pdf-max-image-width', 'pdfMaxImageWidth', '420'), 10) || 420,
+          pdfExportCss: self._readLabel('pdf-export-css', 'pdfExportCss', ''),
+          pdfUseComputedStyles: self._isTruthyProp('pdfUseComputedStyles', 'pdf-use-computed-styles'),
+          pdfPageBackground: self._readLabel('pdf-page-background', 'pdfPageBackground', '#ffffff'),
+        });
+      } else if (format === 'pdf' && engine.enrichItemForPdf) {
         engine.enrichItemForPdf(item, targetEl);
       }
       var options = {
@@ -280,6 +293,11 @@ dmx.Component('datadump-export', {
         locale: locale,
         filenamePrefix: filenamePrefix,
         showPdfFooterTimestamp: self._isTruthyProp('showPdfFooterTimestamp', 'show-pdf-footer-timestamp'),
+        pageOrientation: self._readLabel('pdf-orientation', 'pdfOrientation', 'portrait'),
+        pdfMaxImageWidth: parseInt(self._readLabel('pdf-max-image-width', 'pdfMaxImageWidth', '420'), 10) || 420,
+        pdfExportCss: self._readLabel('pdf-export-css', 'pdfExportCss', ''),
+        pdfUseComputedStyles: self._isTruthyProp('pdfUseComputedStyles', 'pdf-use-computed-styles'),
+        pdfPageBackground: self._readLabel('pdf-page-background', 'pdfPageBackground', '#ffffff'),
       };
 
       if (format === 'pdf') {
