@@ -5,7 +5,7 @@
 
 [![License: Mr Cheese Extension v1.0](https://img.shields.io/badge/License-Mr%20Cheese%20Extension%20v1.0-blue.svg)](https://www.mrcheese.co.uk/extension-license)
 ![Wappler](https://img.shields.io/badge/Wappler-App%20Connect-teal)
-![Version](https://img.shields.io/badge/version-1%2E0%2E7-green)
+![Version](https://img.shields.io/badge/version-1%2E0%2E8-green)
 
 Built by **[Mr Cheese](https://www.mrcheese.co.uk)** · Wappler extensions & custom modules
 
@@ -16,7 +16,7 @@ Built by **[Mr Cheese](https://www.mrcheese.co.uk)** · Wappler extensions & cus
 1. **DataDump Export:** App Connect component with icon buttons for **PDF**, **CSV**, and **Excel**.
 2. Each instance has its own **target selector** (e.g. `#accountsReport`, `.reservations-panel`).
 3. Toggle **Show PDF**, **Show CSV**, and **Show Excel** per instance. Only the formats you need appear.
-4. **PDF** exports full content (headings, prose, **bullet and numbered lists**, tables, and **images**) from the target HTML or structured payload. Output is a very good representation of the section you export (if not always pixel-perfect).
+4. **PDF** exports from the **live rendered HTML** in your target (Bootstrap tables, colours, stacked dates). Structured JSON payload is still used when you bind `payload-json`, but PDF prefers the on-screen DOM so styling matches the page.
 5. **CSV** and **Excel** export **table data only** (HTML `<table>` or markdown pipe tables in optional JSON payload).
 
 See [examples/pdf-export-with-image-bullet-list.pdf](examples/pdf-export-with-image-bullet-list.pdf) for a sample PDF with an image, bullet list, and table from a typical export block.
@@ -137,7 +137,24 @@ For AI/report pipelines, bind JSON instead of relying on DOM parsing:
 dmx-bind:payload-json="myRow.payloadJson"
 ```
 
-Shape: `{ "type": "markdown", "body": "…" }` or `{ "type": "mixed", "parts": […] }`. See [examples/README.md](examples/README.md).
+Shape: `{ "type": "markdown", "body": "…" }`, `{ "type": "html", "body": "…" }`, or `{ "type": "mixed", "parts": […] }`. For HTML reports, prefer `"type": "html"` so tables parse reliably. See [examples/README.md](examples/README.md).
+
+### PDF layout and styling
+
+PDF export snapshots the target element when you click **Export PDF**, then walks the DOM (not a plain text scrape). That keeps Bootstrap and custom markup closer to what users see on screen.
+
+| Feature | How to use it |
+|---------|----------------|
+| **Striped tables** | Bootstrap `table` / `table-striped` (pdfmake zebra rows, header band) |
+| **Cell colours** | `data-export-tone="income\|expenditure\|disbursement\|negative"` on `<td>` / `<th>`, or Bootstrap `text-success`, `text-danger`, `text-info` |
+| **Custom tones** | Classes `datadump-cell--income`, `--expenditure`, `--disbursement`, `--negative` |
+| **Stacked date/time** | `.datadump-datetime__date` and `.datadump-datetime__time` inside a cell (exports on two lines) |
+| **Summary blocks** | Table class `datadump-table--summary`, or first row label Total / Subtotal / Balance / Summary |
+| **Export sub-region** | Wrap report body in `data-datadump-export-content` inside the target |
+| **Skip nodes** | `data-datadump-export-skip` on elements to omit from PDF |
+| **Charts (optional)** | `data-datadump-chart` plus `window.DATADUMP_CHARTS.chartHostToPngDataUrl()` if you register a chart helper |
+
+Inline `style="color:…"` on cells (or child `strong` / `span`) is honoured in PDF. CSV and Excel export plain cell text only (colours are PDF-only).
 
 ---
 
@@ -149,6 +166,8 @@ Shape: `{ "type": "markdown", "body": "…" }` or `{ "type": "mixed", "parts": [
 | **Prose / headings** | Yes | No | No |
 | **Bullet / numbered lists** | Yes | No | No |
 | **Images** | Yes (same-origin or `data:` URLs) | No | No |
+| **Table striping / colours** | Yes (HTML classes, `data-export-tone`) | No | No |
+| **Live DOM snapshot (PDF)** | Yes, on export click | Uses tables from DOM / payload | Same as CSV |
 | **Multiple tables** | Sequential in document | `# Table N` sections in one file | Separate worksheets |
 | **Async** | Yes | No | No |
 | **Libraries** | pdfmake (lazy) | None | SheetJS (lazy) |

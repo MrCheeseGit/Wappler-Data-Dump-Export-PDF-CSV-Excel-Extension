@@ -271,6 +271,9 @@ dmx.Component('datadump-export', {
     var run = function () {
       var targetEl = self._resolveTarget();
       var item = self._buildItem(targetEl);
+      if (format === 'pdf' && engine.enrichItemForPdf) {
+        engine.enrichItemForPdf(item, targetEl);
+      }
       var options = {
         item: item,
         labels: labels,
